@@ -1,0 +1,44 @@
+# azure-pipelines.yml
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install --upgrade virtualenv
+    python -m venv .venv
+    source .venv/bin/activate
+    pip install -r requirements.txt
+  displayName: 'Set up Python environment'
+
+- task: TerraformInstaller@0
+  inputs:
+    terraformVersion: 'latest'
+
+- script: |
+    terraform init
+    terraform validate
+    terraform plan -out=tfplan
+  displayName: 'Terraform Init and Plan'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(System.DefaultWorkingDirectory)'
+    artifactName: 'terraform-artifact'
+    publishLocation: 'Pipeline'
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'apply'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+    environmentServiceName: 'AzureRM'
+    commandOptions: '-auto-approve tfplan'
+  displayName: 'Terraform Apply'

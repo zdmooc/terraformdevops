@@ -1,11 +1,19 @@
-variable "resource_group_name" {
-  type        = string
-  description = "The name of the resource group"
-  default     = "example-resources"
+# variables.tf
+variable "location" {
+  description = "The location where resources will be deployed."
+  default     = "West Europe"
 }
 
-variable "location" {
-  type        = string
-  description = "The Azure location where resources will be created"
-  default     = "East US"
+variable "resource_group_name" {
+  description = "The name of the resource group."
+  default     = "azdevops-resources"
 }
+
+variable "tenant_id" {
+  description = "Azure AD tenant ID"
+}
+
+variable "client_id" {
+  description = "Azure AD client ID"
+}
+
