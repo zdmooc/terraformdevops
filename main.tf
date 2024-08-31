@@ -1,8 +1,3 @@
-# main.tf
-provider "azurerm" {
-  features {}
-}
-
 resource "azurerm_resource_group" "azdevops" {
   name     = var.resource_group_name
   location = var.location
@@ -14,30 +9,15 @@ resource "azurerm_key_vault" "azdevops" {
   resource_group_name         = azurerm_resource_group.azdevops.name
   tenant_id                   = var.tenant_id
   sku_name                    = "standard"
-  soft_delete_enabled         = true
   purge_protection_enabled    = true
 
   access_policy {
     tenant_id = var.tenant_id
-    object_id = var.client_id  # L'objet Azure AD associé au client_id
+    object_id = var.client_id
     permissions {
-      secrets = [
-        "get",
-        "list",
-      ]
+      secrets = ["get", "list", "set", "delete"]
     }
   }
-}
-
-# Autres ressources Azure pour le projet AZ-900
-# Ajoutez ici les configurations pour VMs, Storage Accounts, ou autres services nécessaires
-
-
-
-
-resource "azurerm_resource_group" "azdevops" {
-  name     = var.resource_group_name
-  location = var.location
 }
 
 resource "azurerm_virtual_network" "azdevops" {

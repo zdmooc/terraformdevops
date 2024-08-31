@@ -1,15 +1,11 @@
-# outputs.tf
-output "key_vault_id" {
-  value = azurerm_key_vault.azdevops.id
-}
-
 output "resource_group_name" {
   value = azurerm_resource_group.azdevops.name
 }
 
+output "virtual_network_id" {
+  value = azurerm_virtual_network.azdevops.id
+}
 
-
-output "virtual_machine_id" {
-  description = "The ID of the virtual machine"
-  value       = azurerm_linux_virtual_machine.example.id
+output "vm_public_ip" {
+  value = azurerm_linux_virtual_machine.azdevops.public_ip_address
 }
